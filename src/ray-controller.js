@@ -193,9 +193,9 @@ export default class RayController extends EventEmitter {
 
   onTouchEnd_(e) {
     this.endDragging_();
-
+    // console.log(e);
     // Prevent synthetic mouse event from being created.
-    e.preventDefault();
+    // e.preventDefault();
     this.isTouchActive = false;
   }
 
