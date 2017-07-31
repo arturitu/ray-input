@@ -59,6 +59,8 @@ export default class RayController extends EventEmitter {
     this.isTouchActive = false;
     // Is this a synthetic mouse event?
     this.isSyntheticMouseEvent = false;
+    // Offset by default of the window
+    this.offset = {'top':0,'left':0};
 
     // Gamepad events.
     this.gamepad = null;
