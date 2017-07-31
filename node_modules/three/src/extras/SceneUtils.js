@@ -2,13 +2,11 @@ import { Matrix4 } from '../math/Matrix4';
 import { Mesh } from '../objects/Mesh';
 import { Group } from '../objects/Group';
 
-var SceneUtils;
-
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-SceneUtils = {
+var SceneUtils = {
 
 	createMultiMaterialObject: function ( geometry, materials ) {
 
@@ -34,9 +32,7 @@ SceneUtils = {
 
 	attach: function ( child, scene, parent ) {
 
-		var matrixWorldInverse = new Matrix4();
-		matrixWorldInverse.getInverse( parent.matrixWorld );
-		child.applyMatrix( matrixWorldInverse );
+		child.applyMatrix( new Matrix4().getInverse( parent.matrixWorld ) );
 
 		scene.remove( child );
 		parent.add( child );

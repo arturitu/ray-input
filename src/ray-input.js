@@ -105,7 +105,6 @@ export default class RayInput extends EventEmitter {
         // But we should be using the orientation from the gamepad.
         // TODO(smus): Implement the real arm model.
         var pose = this.controller.getGamepadPose();
-
         // Debug only: use camera as input controller.
         //let controllerOrientation = this.camera.quaternion;
         let controllerOrientation = new THREE.Quaternion().fromArray(pose.orientation);
@@ -122,7 +121,6 @@ export default class RayInput extends EventEmitter {
         this.armModel.setHeadOrientation(this.camera.quaternion);
         this.armModel.setHeadPosition(this.camera.position);
         this.armModel.setControllerOrientation(controllerOrientation);
-        this.armModel.setLeftHanded(this.controller.isLeftHanded);
         this.armModel.update();
 
         // Get resulting pose and configure the renderer.
@@ -131,7 +129,7 @@ export default class RayInput extends EventEmitter {
         //this.renderer.setPosition(new THREE.Vector3());
         this.renderer.setOrientation(modelPose.orientation);
         //this.renderer.setOrientation(controllerOrientation);
-
+        this.armModel.setLeftHanded(this.controller.isLeftHanded);
         // Show ray and reticle.
         this.renderer.setRayVisibility(true);
         this.renderer.setReticleVisibility(true);
@@ -173,6 +171,10 @@ export default class RayInput extends EventEmitter {
 
   setSize(size) {
     this.controller.setSize(size);
+  }
+
+  setOffset(offset){
+    this.controller.setOffset(offset);
   }
 
   getMesh() {

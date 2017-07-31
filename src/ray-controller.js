@@ -59,10 +59,11 @@ export default class RayController extends EventEmitter {
     this.isTouchActive = false;
     // Is this a synthetic mouse event?
     this.isSyntheticMouseEvent = false;
-    //  Is lefthanded
-    this.isLeftHanded = false;
+
     // Gamepad events.
     this.gamepad = null;
+
+    this.isLeftHanded = false;
 
     // VR Events.
     if (!navigator.getVRDisplays) {
@@ -79,7 +80,6 @@ export default class RayController extends EventEmitter {
     //return InteractionModes.DAYDREAM;
 
     var gamepad = this.getVRGamepad_();
-
     this.gamepad = gamepad;
     if (gamepad) {
       if(gamepad.hand){
@@ -148,6 +148,10 @@ export default class RayController extends EventEmitter {
 
   setSize(size) {
     this.size = size;
+  }
+
+  setOffset(offset){
+    this.offset = offset;
   }
 
   update() {
@@ -241,9 +245,9 @@ export default class RayController extends EventEmitter {
 
   updatePointer_(e) {
     // How much the pointer moved.
-    this.pointer.set(e.clientX, e.clientY);
-    this.pointerNdc.x = (e.clientX / this.size.width) * 2 - 1;
-    this.pointerNdc.y = - (e.clientY / this.size.height) * 2 + 1;
+    this.pointer.set(e.clientX - this.offset.left, e.clientY - this.offset.top);
+    this.pointerNdc.x = ((e.clientX - this.offset.left) / this.size.width) * 2 - 1;
+    this.pointerNdc.y = - ((e.clientY - this.offset.top) / this.size.height) * 2 + 1;
   }
 
   updateDragDistance_() {
@@ -263,7 +267,7 @@ export default class RayController extends EventEmitter {
 
   startDragging_(e) {
     this.isDragging = true;
-    this.lastPointer.set(e.clientX, e.clientY);
+    this.lastPointer.set(e.clientX - this.offset.left, e.clientY - this.offset.top);
   }
 
   endDragging_() {
@@ -286,7 +290,6 @@ export default class RayController extends EventEmitter {
     var gamepads = navigator.getGamepads();
     for (var i = 0; i < gamepads.length; ++i) {
       var gamepad = gamepads[i];
-
       // The array may contain undefined gamepads, so check for that as well as
       // a non-null pose.
       if (gamepad && gamepad.pose) {

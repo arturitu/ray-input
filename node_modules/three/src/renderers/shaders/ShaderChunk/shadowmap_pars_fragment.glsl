@@ -21,6 +21,14 @@
 
 	#endif
 
+	/*
+	#if NUM_RECT_AREA_LIGHTS > 0
+
+		// TODO (abelnation): create uniforms for area light shadows
+
+	#endif
+	*/
+
 	float texture2DCompare( sampler2D depths, vec2 uv, float compare ) {
 
 		return step( compare, unpackRGBAToDepth( texture2D( depths, uv ) ) );
@@ -51,6 +59,8 @@
 
 	float getShadow( sampler2D shadowMap, vec2 shadowMapSize, float shadowBias, float shadowRadius, vec4 shadowCoord ) {
 
+		float shadow = 1.0;
+
 		shadowCoord.xyz /= shadowCoord.w;
 		shadowCoord.z += shadowBias;
 
@@ -75,7 +85,7 @@
 			float dx1 = + texelSize.x * shadowRadius;
 			float dy1 = + texelSize.y * shadowRadius;
 
-			return (
+			shadow = (
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( dx0, dy0 ), shadowCoord.z ) +
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( 0.0, dy0 ), shadowCoord.z ) +
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( dx1, dy0 ), shadowCoord.z ) +
@@ -96,7 +106,7 @@
 			float dx1 = + texelSize.x * shadowRadius;
 			float dy1 = + texelSize.y * shadowRadius;
 
-			return (
+			shadow = (
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( dx0, dy0 ), shadowCoord.z ) +
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( 0.0, dy0 ), shadowCoord.z ) +
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( dx1, dy0 ), shadowCoord.z ) +
@@ -110,13 +120,13 @@
 
 		#else // no percentage-closer filtering:
 
-			return texture2DCompare( shadowMap, shadowCoord.xy, shadowCoord.z );
+			shadow = texture2DCompare( shadowMap, shadowCoord.xy, shadowCoord.z );
 
 		#endif
 
 		}
 
-		return 1.0;
+		return shadow;
 
 	}
 
