@@ -174,6 +174,10 @@ export default class RayInput extends EventEmitter {
     this.controller.setSize(size);
   }
 
+  setOffset(offset){
+    this.controller.setOffset(offset);
+  }
+
   getMesh() {
     return this.renderer.getReticleRayMesh();
   }

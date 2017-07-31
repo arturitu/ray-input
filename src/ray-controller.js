@@ -141,6 +141,10 @@ export default class RayController extends EventEmitter {
     this.size = size;
   }
 
+  setOffset(offset){
+    this.offset = offset;
+  }
+
   update() {
     let mode = this.getInteractionMode();
     if (mode == InteractionModes.VR_3DOF || mode == InteractionModes.VR_6DOF) {
@@ -232,9 +236,9 @@ export default class RayController extends EventEmitter {
 
   updatePointer_(e) {
     // How much the pointer moved.
-    this.pointer.set(e.clientX, e.clientY);
-    this.pointerNdc.x = (e.clientX / this.size.width) * 2 - 1;
-    this.pointerNdc.y = - (e.clientY / this.size.height) * 2 + 1;
+    this.pointer.set(e.clientX - this.offset.left, e.clientY - this.offset.top);
+    this.pointerNdc.x = ((e.clientX - this.offset.left) / this.size.width) * 2 - 1;
+    this.pointerNdc.y = - ((e.clientY - this.offset.top) / this.size.height) * 2 + 1;
   }
 
   updateDragDistance_() {
@@ -254,7 +258,7 @@ export default class RayController extends EventEmitter {
 
   startDragging_(e) {
     this.isDragging = true;
-    this.lastPointer.set(e.clientX, e.clientY);
+    this.lastPointer.set(e.clientX - this.offset.left, e.clientY - this.offset.top);
   }
 
   endDragging_() {

@@ -48,6 +48,7 @@ export default class MenuRenderer {
     // Input manager.
     var rayInput = new RayInput(camera)
     rayInput.setSize(renderer.getSize());
+    rayInput.setOffset({'top':renderer.domElement.offsetTop,'left':renderer.domElement.offsetLeft});
     rayInput.on('raydown', (opt_mesh) => { this.handleRayDown_(opt_mesh) });
     rayInput.on('rayup', (opt_mesh) => { this.handleRayUp_(opt_mesh) });
     rayInput.on('raycancel', (opt_mesh) => { this.handleRayCancel_(opt_mesh) });
@@ -91,6 +92,7 @@ export default class MenuRenderer {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.rayInput.setSize(this.renderer.getSize());
+    this.rayInput.setOffset({'top':renderer.domElement.offsetTop,'left':renderer.domElement.offsetLeft});
   }
 
   handleRayDown_(opt_mesh) {
