@@ -91,6 +91,7 @@ export default class MenuRenderer {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.rayInput.setSize(this.renderer.getSize());
+    this.rayInput.setOffset({'top':this.renderer.domElement.offsetTop,'left':this.renderer.domElement.offsetLeft});
   }
 
   handleRayDown_(opt_mesh) {
